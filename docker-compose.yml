@@ -1,0 +1,32 @@
+x-defaults:
+  service: &service-defaults
+    image: leproxy
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: sh -c 'php leproxy.php "$${LISTENING}"'
+
+services:
+  leproxy-unprotected:
+    <<: *service-defaults
+    container_name: leproxy-unprotected
+    ports:
+      - "1080:1080"
+    volumes:
+      - logs-leproxy-unprotected:/var/log
+    environment:
+      LISTENING: "0.0.0.0:1080"
+    
+  leproxy-protected:
+    <<: *service-defaults
+    container_name: leproxy-protected
+    ports:
+      - "1081:1080"
+    volumes:
+      - logs-leproxy-protected:/var/log
+    environment:
+      LISTENING: "username:password@0.0.0.0:1081"
+
+volumes:
+  logs-leproxy-unprotected:
+  logs-leproxy-protected:
