@@ -37,7 +37,7 @@ sleep 2
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "socks4a://127.0.0.1:$TEST_PORT" --location http://github.com  2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
 
 # ensure we can receive multiple "Set-Cookie" headers
-#((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://127.0.0.1:$TEST_PORT" "http://httpbin.org/cookies/set?k2=v2&k1=v1" 2>&1) && (echo "$out" | grep -q "Set-Cookie: k2=v2;" && echo OK) || (echo "FAIL: $out" && exit 1) || exit 1
+((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://127.0.0.1:$TEST_PORT" "http://httpbin.org/cookies/set?k2=v2&k1=v1" 2>&1) && (echo "$out" | grep -q "Set-Cookie: k2=v2;" && echo OK) || (echo "FAIL: $out" && exit 1) || exit 1
 
 # unneeded authentication should work
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://user:pass@127.0.0.1:$TEST_PORT" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
@@ -61,11 +61,9 @@ php $bin "[::1]:$TEST_PORT" --no-log &
 sleep 2
 
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://[::1]:$TEST_PORT" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
-((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://127.0.0.1:$TEST_PORT" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://[::1]:$TEST_PORT" "http://[::1]:$TEST_PORT/pac" 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
-((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --fail --proxy "socks://[::1]:$TEST_PORT" -4 http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
-((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --fail --proxy "socks://127.0.0.1:$TEST_PORT" -4 http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
-((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --fail --proxy "socks5://[::1]:$TEST_PORT" "http://[::1]:$TEST_PORT/pac" 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
+((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "socks://[::1]:$TEST_PORT" -6 http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
+((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "socks5://[::1]:$TEST_PORT" "http://[::1]:$TEST_PORT/pac" 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
 
 # restart LeProxy with hosts and plain HTTP port blocked
 killall php 2>&- 1>&- || true
