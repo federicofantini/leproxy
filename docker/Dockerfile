@@ -1,7 +1,7 @@
 FROM php:7.4.33-zts-alpine AS builder
 
 # apt dependencies
-RUN apk add --no-cache --upgrade bash shadow curl zip unzip git libzip-dev
+RUN apk add --no-cache --upgrade bash shadow curl zip unzip git libzip-dev net-tools
 
 # install php extensions provided by docker image
 RUN docker-php-ext-install zip sockets
