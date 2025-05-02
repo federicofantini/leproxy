@@ -1,5 +1,6 @@
 x-defaults:
   service: &service-defaults
+    network_mode: host
     image: leproxy
     build:
       context: .
@@ -7,26 +8,48 @@ x-defaults:
     command: sh -c 'php leproxy.php "$${LISTENING}"'
 
 services:
-  leproxy-unprotected:
+  leproxy-ipv4-unprotected:
     <<: *service-defaults
-    container_name: leproxy-unprotected
-    ports:
-      - "1080:1080"
+    container_name: leproxy-ipv4-unprotected
+    expose:
+      - 1080
     volumes:
-      - logs-leproxy-unprotected:/var/log
+      - logs-leproxy-ipv4-unprotected:/var/log
     environment:
       LISTENING: "0.0.0.0:1080"
     
-  leproxy-protected:
+  leproxy-ipv4-protected:
     <<: *service-defaults
-    container_name: leproxy-protected
-    ports:
-      - "1081:1080"
+    container_name: leproxy-ipv4-protected
+    expose:
+      - 1081
     volumes:
-      - logs-leproxy-protected:/var/log
+      - logs-leproxy-ipv4-protected:/var/log
     environment:
       LISTENING: "username:password@0.0.0.0:1081"
 
+  leproxy-ipv6-unprotected:
+    <<: *service-defaults
+    container_name: leproxy-ipv6-unprotected
+    expose:
+      - 1082
+    volumes:
+      - logs-leproxy-ipv6-unprotected:/var/log
+    environment:
+      LISTENING: "[::]:1082"
+
+  leproxy-ipv6-protected:
+    <<: *service-defaults
+    container_name: leproxy-ipv6-protected
+    expose:
+      - 1083
+    volumes:
+      - logs-leproxy-ipv6-protected:/var/log
+    environment:
+      LISTENING: "username:password@[::]:1083"
+
 volumes:
-  logs-leproxy-unprotected:
-  logs-leproxy-protected:
+  logs-leproxy-ipv4-unprotected:
+  logs-leproxy-ipv4-protected:
+  logs-leproxy-ipv6-unprotected:
+  logs-leproxy-ipv6-protected:
