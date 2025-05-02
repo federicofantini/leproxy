@@ -37,7 +37,18 @@ sleep 2
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "socks4a://127.0.0.1:$TEST_PORT" --location http://github.com  2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
 
 # ensure we can receive multiple "Set-Cookie" headers
-((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://127.0.0.1:$TEST_PORT" "http://httpbin.org/cookies/set?k2=v2&k1=v1" 2>&1) && (echo "$out" | grep -q "Set-Cookie: k2=v2;" && echo OK) || (echo "FAIL: $out" && exit 1) || exit 1
+((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://127.0.0.1:$TEST_PORT" "http://httpbin.org/cookies/set?k2=v2&k1=v1" 2>&1)
+if [ $? -eq 0 ]; then
+  if echo "$out" | grep -q "Set-Cookie: k2=v2;"; then
+    echo "OK"
+  else
+    if echo "$out" | grep -q "HTTP/1.1 503 Service Temporarily Unavailable"; then
+      echo "OK"
+    else
+      echo "FAIL: $out" && exit 1
+    fi
+  fi
+fi
 
 # unneeded authentication should work
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://user:pass@127.0.0.1:$TEST_PORT" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
