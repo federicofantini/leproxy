@@ -133,7 +133,7 @@ sleep 2
 
 # client does not need authentication because first chain passes to next via HTTP
 ((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "http://127.0.0.1:$TEST_PORT_CHAIN_1" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
-((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "socks5h://127.0.0.1:TEST_PORT_CHAIN_1" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
+((test_number++)); echo -n "$test_number - "; out=$(curl -v --head --silent --fail --proxy "socks5h://127.0.0.1:$TEST_PORT_CHAIN_1" http://reactphp.org 2>&1) && echo OK || (echo "FAIL: $out" && exit 1) || exit 1
 
 # start another LeProxy instance for SOCKS proxy chaining / nesting
 php $bin "127.0.0.1:$TEST_PORT_CHAIN_2" --proxy="socks://user:pass@127.0.0.1:$TEST_PORT" --no-log &
