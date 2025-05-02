@@ -32,6 +32,8 @@ accepting both common HTTP and SOCKS proxy protocols on a single listening port.
 
 ## Install
 
+### PHP
+
 LeProxy requires only PHP.
 *PHP 7+ is highly recommended*, but it runs on any system that uses PHP 5.4+ or
 HHVM.
@@ -59,6 +61,9 @@ You did it!! Really simple, huh?
   but you can use any name you want.
   If you're interested in the more technical details of this file, you may want
   to check out the [development instructions](#development) below.
+
+### Docker
+To start the project, just give the command `docker compose up`. Instead, to configure new listening services, just customize the `docker-compose.yml` file following the options supported in the documentation.
 
 ## Usage
 
