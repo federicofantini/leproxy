@@ -7,10 +7,10 @@ x-defaults:
       dockerfile: docker/Dockerfile
     command: sh -c 'php leproxy.php "$${LISTENING}"'
     healthcheck:
-      test: ["CMD-SHELL", "bash -c 'netstat -an | grep \"${LISTENING##*:}\" > /dev/null || exit 1'"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: ["CMD", "bash", "/app/docker/healthcheck.sh"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
 services:
   leproxy-ipv4-unprotected:
