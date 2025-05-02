@@ -45,11 +45,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./app
-          file: ./app/docker/Dockerfile
+          context: ./
+          file: ./docker/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/leproxy:${{ github.ref_name }}
