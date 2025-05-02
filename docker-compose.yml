@@ -7,7 +7,7 @@ x-defaults:
       dockerfile: docker/Dockerfile
     command: sh -c 'php leproxy.php "$${LISTENING}"'
     healthcheck:
-      test: netstat -an | grep "$${LISTENING##*:}" > /dev/null; if [ 0 != $? ]; then exit 1; fi;
+      test: ["CMD-SHELL", "netstat -an | grep \"$${LISTENING##*:}\" > /dev/null; if [ 0 != $? ]; then exit 1; fi;"]
       interval: 30s
       timeout: 10s
       retries: 3
