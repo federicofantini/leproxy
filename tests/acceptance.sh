@@ -43,7 +43,7 @@ if [ $? -eq 0 ]; then
     echo "OK"
   else
     if echo "$out" | grep -q "HTTP/1.1 503 Service Temporarily Unavailable"; then
-      echo "OK"
+      echo "OK (service httpbin.org got 503 status code -> temporarily unavailable"
     else
       echo "FAIL: $out" && exit 1
     fi
