@@ -29,10 +29,14 @@ jobs:
           echo "Waiting healthcheck..."
           sleep 20
           docker-compose ps
-          if ! docker inspect --format='{{json .State.Health.Status}}' $(docker-compose ps -q | head -n 1) | grep -q '"healthy"'; then
-            echo "ERROR: Container not healthy"
-            exit 1
-          fi
+          for container_id in $(docker-compose ps -q); do
+            status=$(docker inspect --format='{{json .State.Health.Status}}' "$container_id")
+            echo "Container $container_id health status: $status"
+            if [ "$status" != "\"healthy\"" ]; then
+              echo "ERROR: Container $container_id is not healthy"
+              exit 1
+            fi
+          done
 
   push-image:
     needs: healthcheck
